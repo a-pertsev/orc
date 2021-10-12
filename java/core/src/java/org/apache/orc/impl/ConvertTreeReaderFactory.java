@@ -21,9 +21,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.ZoneId;
 import java.util.EnumMap;
 import java.util.Map;
 
+import java.util.TimeZone;
 import org.apache.hadoop.hive.common.type.HiveDecimal;
 import org.apache.hadoop.hive.ql.exec.vector.BytesColumnVector;
 import org.apache.hadoop.hive.ql.exec.vector.ColumnVector;
@@ -1807,6 +1809,7 @@ public class ConvertTreeReaderFactory extends TreeReaderFactory {
 
     private LongColumnVector longColVector;
     private TimestampColumnVector timestampColVector;
+    private final TimeZone moscowTz = TimeZone.getTimeZone(ZoneId.of("Europe/Moscow"));
 
     TimestampFromAnyIntegerTreeReader(int columnId, TypeDescription fileType,
         Context context) throws IOException {
@@ -1820,7 +1823,7 @@ public class ConvertTreeReaderFactory extends TreeReaderFactory {
     public void setConvertVectorElement(int elementNum) {
       long longValue = longColVector.vector[elementNum];
       // UNDONE: What does the boolean setting need to be?
-      timestampColVector.set(elementNum, new Timestamp(longValue));
+      timestampColVector.set(elementNum, new Timestamp(longValue + moscowTz.getRawOffset()));
     }
 
     @Override

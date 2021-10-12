@@ -24,6 +24,7 @@
   </parent>
 
   <artifactId>orc-core</artifactId>
+  <version>1.5.6-hh</version>
   <packaging>jar</packaging>
   <name>ORC Core</name>
   <description>
